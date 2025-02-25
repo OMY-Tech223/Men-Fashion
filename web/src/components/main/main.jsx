@@ -1,193 +1,250 @@
-import { Box, Container, Stack, Typography, useTheme, Button, Rating,Dialog } from '@mui/material';
-import React from 'react'
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
-import Close from '@mui/icons-material/Close'; 
-import IconButton from '@mui/material/IconButton';
-import ProductDetails from './ProductDetails';
+import { Box, Container, Typography, Grid, useTheme } from '@mui/material';
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
+import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
+import CreditScoreOutlinedIcon from '@mui/icons-material/CreditScoreOutlined';
 
 const Main = () => {
-    const [alignment, setAlignment] = React.useState('left');
-
-    const handleAlignment = (event, newAlignment) => {
-        setAlignment(newAlignment);
-    };
-
     const theme = useTheme();
-    const [open, setOpen] = React.useState(true);
+    const navigate = useNavigate(); // Hook for navigation
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    // Data for the four photos
+    const collections = [
+        {
+            title: "Summer Collection",
+            image: "./images/2.jpg",
+            path: "/summer", // Path to the Summer collection page
+        },
+        {
+            title: "Casual Collection",
+            image: "./images/1.jpg",
+            path: "/casual", // Path to the Casual collection page
+        },
+        {
+            title: "Shoe Collection",
+            image: "./images/4.jpg",
+            path: "/shoe", // Path to the Shoe collection page
+        },
+        {
+            title: "Winter Collection",
+            image: "./images/3.jpg",
+            path: "/winter", // Path to the Winter collection page
+        },
+    ];
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    // Data for the three boxes
+    const features = [
+        {
+            icon: <BoltOutlinedIcon sx={{ fontSize: 50, color: theme.palette.primary.main }} />,
+            title: "Fast Delivery",
+            description: "We deliver your orders quickly and efficiently.",
+        },
+        {
+            icon: <QueryBuilderOutlinedIcon sx={{ fontSize: 50, color: theme.palette.primary.main }} />,
+            title: "15 Days for Free Return",
+            description: "Not satisfied? Return your order within 15 days for free.",
+        },
+        {
+            icon: <CreditScoreOutlinedIcon sx={{ fontSize: 50, color: theme.palette.primary.main }} />,
+            title: "Secure Payment",
+            description: "Your payments are safe and secure with us.",
+        },
+    ];
 
     return (
-        <Container sx={{ py: 9 }}>
-            <Stack direction={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-                flexWrap={"wrap"}
-                gap={3}>
+        <Container id="main-section" sx={{ py: 9 }}>
+            {/* Big Box with Four Photos */}
+            <Box sx={{ width: '100%', mt: 4 }}>
+                <Grid container spacing={4}>
+                    {collections.map((collection, index) => (
+                        <Grid item xs={12} sm={6} md={3} key={index}>
+                            {/* Small Box with Photo and Text */}
+                            <Box
+                                sx={{
+                                    position: 'relative',
+                                    width: '100%',
+                                    height: 300,
+                                    overflow: 'hidden',
+                                    borderRadius: '8px',
+                                    boxShadow: theme.shadows[3],
+                                    '&:hover img': {
+                                        transform: 'scale(1.1)',
+                                        transition: 'transform 0.3s ease',
+                                    },
+                                    cursor: 'pointer', // Change cursor to pointer on hover
+                                }}
+                                onClick={() => navigate(collection.path)} // Navigate on click
+                            >
+                                {/* Photo */}
+                                <img
+                                    src={collection.image}
+                                    alt={collection.title}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                    }}
+                                />
 
-                <Box>
-                    <Typography variant='h6'>Selected Products</Typography>
-                    <Typography fontWeight={300} variant='body1'>
-                        All our new arrivals in a exclusive brand selection
+                                {/* Text Overlay */}
+                                <Box
+                                    sx={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        textAlign: 'center',
+                                        color: '#FFF',
+                                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+                                    }}
+                                >
+                                    <Typography variant="h5" fontWeight="bold">
+                                        {collection.title}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+
+            {/* Three Centered Boxes */}
+            <Box sx={{ width: '100%', mt: 8, textAlign: 'center' }}>
+                <Grid container spacing={4} justifyContent="center">
+                    {features.map((feature, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    p: 3,
+                                    borderRadius: '8px',
+                                    border: `2px solid ${theme.palette.primary.main}`,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Low transparency
+                                    transition: 'transform 0.3s ease',
+                                    '&:hover': {
+                                        transform: 'scale(1.05)',
+                                    },
+                                }}
+                            >
+                                {/* Icon */}
+                                {feature.icon}
+
+                                {/* Title */}
+                                <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }}>
+                                    {feature.title}
+                                </Typography>
+
+                                {/* Description */}
+                                <Typography variant="body1" sx={{ mt: 1 }}>
+                                    {feature.description}
+                                </Typography>
+                            </Box>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+
+            {/* Blog and Certificates Section */}
+            <Box sx={{ width: '100%', mt: 8, textAlign: 'center' }}>
+                <Typography variant="h4" fontWeight="bold" sx={{ mb: 4 }}>
+                    Blog & Certificates
+                </Typography>
+
+                {/* Blog Section */}
+                <Box sx={{ mb: 6 }}>
+                    <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
+                        Latest Blog Posts
                     </Typography>
+                    <Typography variant="body1">
+                        Stay updated with our latest news and articles.
+                    </Typography>
+                    {/* Blog Posts */}
+                    <Grid container spacing={4} justifyContent="center" sx={{ mt: 2 }}>
+                        {[
+                            {
+                                title: "Summer Collection Trends 2025",
+                                description: "Discover the latest trends in our Summer Collection. From vibrant colors to lightweight fabrics, we’ve got you covered for the sunny season.",
+                            },
+                            {
+                                title: "Casual Collection: Style Meets Comfort",
+                                description: "Explore our Casual Collection, where style meets comfort. Perfect for everyday wear, these pieces are designed to keep you looking great effortlessly.",
+                            },
+                            {
+                                title: "Shoe Collection: Step in Style",
+                                description: "Step up your fashion game with our Shoe Collection. From sneakers to formal shoes, find the perfect pair for every occasion.",
+                            },
+                        ].map((post, index) => (
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <Box
+                                    sx={{
+                                        p: 3,
+                                        borderRadius: '8px',
+                                        boxShadow: theme.shadows[3],
+                                        backgroundColor: theme.palette.background.paper,
+                                    }}
+                                >
+                                    <Typography variant="h6" fontWeight="bold">
+                                        {post.title}
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ mt: 1 }}>
+                                        {post.description}
+                                    </Typography>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>
                 </Box>
 
-                <ToggleButtonGroup
-                    color="error"
-                    value={alignment}
-                    exclusive
-                    onChange={handleAlignment}
-                    aria-label="text alignment"
-                    sx={{
-                        ".Mui-selected": {
-                            border: "1px solid rgba(233,69,96,0.5) !important",
-                            color: "#e94560",
-                            backgroundColor: "initial"
-                        },
-                    }}
-                >
-                    <ToggleButton sx={{
-                        borderRadius: "5px  !important",
-                        border: "1px solid #888 !important",
-                        textTransform: "capitalize !important",
-                        paddingTop: "7px !important",
-                        paddingBottom: "7px !important",
-                        fontSize: "16px !important",
-                        color: theme.palette.text.primary,
-                    }} value="left" aria-label="left aligned">
-                        All Products
-                    </ToggleButton>
-
-
-                    <ToggleButton sx={{
-                        borderRadius: "5px !important",
-                        border: "1px solid #888 !important",
-                        textTransform: "capitalize !important",
-                        paddingTop: "7px !important",
-                        paddingBottom: "7px !important",
-                        fontSize: "16px !important",
-                        mx: "16px !important",
-                        color: theme.palette.text.primary,
-                    }} value="center" aria-label="centered">
-                        MEN category
-                    </ToggleButton>
-
-
-                    <ToggleButton sx={{
-                        borderRadius: "5px !important",
-                        border: "1px solid #888 !important",
-                        textTransform: "capitalize !important",
-                        paddingTop: "7px !important",
-                        paddingBottom: "7px !important",
-                        fontSize: "16px !important",
-                        color: theme.palette.text.primary,
-                    }} value="right" aria-label="right aligned">
-                        WOMEN category
-                    </ToggleButton>
-
-                </ToggleButtonGroup>
-
-            </Stack>
-
-
-
-
-            <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-between"}>
-
-                {["sss","ddd"].map((item) => {
-                    return(
-                        <Card key={item} sx={{ maxWidth: 333, mt: 6,":hover .MuiCardMedia-root": {rotate:"1deg", scale:"1.1", transition:"0.35s"} }}>
-                    <CardMedia
-                        sx={{ height: 277 }}
-                        image="static/images/cards/contemplative-reptile.jpg"
-                        title="green iguana"
-                    />
-
-
-
-
-                    <CardContent>
-                        <Stack
-                            direction={"row"}
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                        >
-                            <Typography gutterBottom variant='h6' component="div">
-                                T-shirt
-                            </Typography>
-
-                            <Typography variant='subtitle' component="p">
-                                $12.99
-                            </Typography>
-                        </Stack>
-
-                        <Typography variant='body2' color='text.secondary'>
-                            Lizards are a widespread group of squamate reptiles, with
-                            over 6,000 species, ranging across all continents except
-                            Antarctica
-                        </Typography>
-
-                    </CardContent>
-
-
-
-
-                    <CardActions sx={{ justifyContent: "space-between" }}>
-                        <Button onClick={handleClickOpen} sx={{ textTransform: "capitalize" }} size="large">
-                            <AddShoppingCartOutlinedIcon sx={{ mr: 1 }} fontSize='small' />
-                            add to cart
-                        </Button>
-                        <Rating precision={0.1} name="read-only" value={3.25} readOnly />
-                    </CardActions>
-                </Card>
-                    )
-                })}
-
-            </Stack>
-
-
-
-
-
-
-
-
-            <Dialog
-            sx={{".MuiPaper-root":{minWidth:{xs:"100%",md:800}}}}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-<IconButton sx={{
-    ":hover":{color:"red",rotate:"180deg", transition:"0.3s"}, 
-    position: "absolute", 
-    top: 0, 
-    right: 10 }} 
-    onClick={handleClose}>
-            <Close />
-          </IconButton>
-          
-          
-          
-       <ProductDetails />
-      </Dialog>
-
-
+                {/* Certificates Section */}
+                <Box>
+                    <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
+                        Our Certificates
+                    </Typography>
+                    <Typography variant="body1">
+                        We are proud to be certified for our high-quality collections.
+                    </Typography>
+                    {/* Certificates */}
+                    <Grid container spacing={4} justifyContent="center" sx={{ mt: 2 }}>
+                        {[
+                            {
+                                title: "Eco-Friendly Summer Collection",
+                                description: "Our Summer Collection is certified eco-friendly, using sustainable materials and ethical production practices.",
+                            },
+                            {
+                                title: "Casual Collection Quality Certification",
+                                description: "The Casual Collection has been awarded for its high-quality materials and craftsmanship.",
+                            },
+                            {
+                                title: "Shoe Collection Comfort Certification",
+                                description: "Our Shoe Collection is certified for its exceptional comfort and durability.",
+                            },
+                        ].map((certificate, index) => (
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <Box
+                                    sx={{
+                                        p: 3,
+                                        borderRadius: '8px',
+                                        boxShadow: theme.shadows[3],
+                                        backgroundColor: theme.palette.background.paper,
+                                    }}
+                                >
+                                    <Typography variant="h6" fontWeight="bold">
+                                        {certificate.title}
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ mt: 1 }}>
+                                        {certificate.description}
+                                    </Typography>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Box>
         </Container>
     );
-}
+};
 
 export default Main;

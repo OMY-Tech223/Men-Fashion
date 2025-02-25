@@ -46,3 +46,14 @@ html {
 html {
   scroll-behavior: smooth;
 }
+
+.logo {
+  height: 60px;
+  width: auto;
+}
+
+@media (max-width: 600px) { /* Adjust for small screens */
+  .logo {
+      height: 45px;
+  }
+}
